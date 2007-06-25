@@ -3,37 +3,38 @@
 ---------------
 
 esta version esta funcional:
-* genera la red aleatoriamente
-* grafica la red de forma "inteligente" (filtra datos de la lista de datos en el 'puente')
-* encuentra el camino optimo entre un punto y otro, aunque el costo inicial entre un nodo y otro es por defecto 1. Esto cambia cuando se analice el tamaño de la cola. 
-* determina cual es el siguiente paso del camino, dato necesario para saber hacia que vecino debe encolar. 
-* encola y desencola paquetes
-* tiene un modo "demo" para ver informacion de los distinto objetos e interactuar. 
-* implementacion basica de 'pedir_pagina' que determina en que terminal se encuentra un determinada pagina, la empaqueta, y mueve todos los paquetes al al router inmediato en la cola correspondiente al siguiente paso. 
+  * genera la red aleatoriamente
+  * grafica la red de forma "inteligente" (filtra datos de la lista de datos en el 'puente') 
+  * encuentra el camino optimo entre un punto y otro, aunque el costo inicial entre un nodo y otro es por defecto 1. Esto cambia cuando se analice el tamaño de la cola. 
+  * determina cual es el siguiente paso del camino, dato necesario para saber hacia que vecino debe encolar. 
+  * encola y desencola paquetes
+  * tiene un modo "demo" para ver informacion de los distinto objetos e interactuar. 
+  * implementacion basica de 'pedir_pagina' que determina en que terminal se encuentra un determinada pagina, la empaqueta, y mueve todos los paquetes al al router inmediato en la cola correspondiente al siguiente paso. 
 
 ==TO DO==
 -----
-* funcion paso: tomar la cantidad maxima de paquetes de una cola y moverlos hacia otra. Deberia ser una funcion atomica para todos los routers al mismo tiempo. 
+  * funcion paso: tomar la cantidad maxima de paquetes de una cola y moverlos hacia otra. Deberia ser una funcion atomica para todos los routers al mismo tiempo. 
 - En el problema original, los caminos se recalculaban cada cierta cantidad de pasos. Aqui podria ser en cada paso, ya que el control siempre lo tiene la red misma, clase Admin2()
-* graficar estado de colas
-* graficar paso a paso
-* modo demo mediante interfaz de usuario grafica..ç
-* modularizar funciones correctamente. 
-* depuracion integral
-* documentar mediante pydoc
+  * graficar estado de colas
+  * graficar paso a paso
+  * modo demo mediante interfaz de usuario grafica..ç
+  * modularizar funciones correctamente. 
+  * depuracion integral
+  * documentar mediante pydoc
 
-Requerimientos
+==Requerimientos==
 ---------------
 
-* requiere python 2.5 (podria ser < pero usé formas cortas del if. Tranquilamente se puede reemplazar)
-* libreria networkx . En ubuntu/debian: #apt-get install python-networkx
-* libreria matplotlib/pylab para graficar : #apt-get install python-matplotlib
+  * requiere python 2.5 (podria ser < pero usé formas cortas del if. Tranquilamente se puede reemplazar)
+  * libreria networkx . En ubuntu/debian: #apt-get install python-networkx
+  * libreria matplotlib/pylab para graficar : #apt-get install python-matplotlib
 
-Ejecucion basica
+==Ejecucion basica==
 -----------------
+
+{{{
 import clases
 lared = clases.Admin()
 lared.demo()
-
-
+}}}
 
