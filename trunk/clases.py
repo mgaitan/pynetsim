@@ -23,7 +23,7 @@ max_cant_term = 5
 max_cant_pag = 4
 asincronico = False #define si el peso de las aristas es simetrico o no
 max_conectividad = 2 #variable estimativa. con cuantos vecinos como maximo puede conectarse un router 
-max_transferencia = 15 #velicidad de transfencia max entre un router y otro (en caracteres)
+max_transferencia = 45 #velicidad de transfencia max entre un router y otro (en caracteres)
 tam_paquete = 3        #cuantos caracteres maximo forman un paquete?
 leer_archivo = False    #si no se lee genera un grafo aleatorio y lo guarda
 grabar_archivo = False
@@ -110,15 +110,13 @@ class Router:
         """agrega los paquetes al principio de la cola correspondiente al vecino indicado. Si el vecino no existe devuelve un error
         la cola es tipo FIFO
         """
-         
-        
         
         try:
             self.cola_vecino[r_vecino.id_router].extend(paquetes)
             #agrego todos los paquetes en la cola hacia el router vecino
             #si es el destino final de los paquetes, analizo completitud
             if self is r_vecino: 
-                self.analizar_completitud(r_vecinos)
+                self.analizar_completitud(r_vecino)
         except:
             print "vecino no valido"
     
@@ -226,7 +224,7 @@ class Admin2:
                 vecinos_asignados = random.sample(posibles, random.choice(range(1, max +1 )))
                 for x in vecinos_asignados:
                     tasa = random.choice(range(tam_paquete, max_transferencia)) #el minimo es el tamaño de 1 paquete
-                    self.red.add_edge(router, x, [1 ,tasa])
+                    self.red.add_edge(router, x, [0 ,tasa])
                     #inicializo las colas
                     router.cola_vecino[x.id_router] = []
                     x.cola_vecino[router.id_router] = []
@@ -318,6 +316,10 @@ class Admin2:
             
     def pedir_pagina(self, pagina, t_destino):
         #empaqueto la pagina
+        
+        if pagina.__class__.__name__ == "int": pagina = self.lista_paginas[pagina]
+        if t_destino.__class__.__name__ == "int" : t_destino = self.lista_terminales[t_destino]
+        
         paquetes = empaquetar(pagina, t_destino.ip_terminal)
         
         print "Se ha solicitado la pagina "+`pagina.id_pagina`
@@ -360,9 +362,10 @@ class Admin2:
         """
         global tam_paquete
         
-        while iteraciones>0:
-            iteraciones -= 1 #decremento el numero de iteraciones
-            if iteraciones>0: print "********* Iteracion "+`iteraciones`+" **************"
+        vuelta = 0
+        while vuelta<iteraciones:
+            vuelta += 1 #decremento el numero de iteraciones
+            if iteraciones>0: print "********* Iteracion "+`vuelta`+" **************"
             for router in self.red.nodes():
                 #por cada vecino del router de la red, envio la cantidad posible de paquetes hacia el siguiente router
                 
@@ -370,7 +373,6 @@ class Admin2:
                     if vecino is router: continue #ignoro el paso de mover paquetes hacia si mismo
                     long_cola = router.long_cola_vecino(vecino)                
                     if long_cola==0: continue #si la cola a un vecino está vacia, la ignoro y sigo con el siguiente vecino
-                    
                     
                     #determino la cantidad de paquetes que se pueden enviar. Si la cantidad en la cola es menor a lo posible, los tomo todos. 
                     tasa = self.red.get_edge(router,vecino)[1]
@@ -389,16 +391,25 @@ class Admin2:
                         print "destino: "+ `router_destino` + " Siguiente : "+ `siguiente`
                         #encolo el paquete al siguiente paso
                         vecino.encolar([paquete], siguiente)  #convierto paquetes en un secuencia de 1 elemento
-                
-                
-                
+
+    def actualizar(self):
+        """este metodo actualiza los valores del primer valor en la arista, que representa
+        el costo (en ciclos) que representa enviar los paquetes entre un nodo y otro. 
+        En este punto, interfiere la carga actual de la red. 
+        Por ejemplo, por más que Entre 1 y 3 hay una conexion rapida, pero hay muchos paquetes hacia 3, 
+        entonces será preferible enviarla por otro camino. 
+        """
+        global tam_paquete
+        for router in self.red.nodes():
+            for vecino in [self.lista_routers[x] for x in router.cola_vecino.keys()]:
+                if vecino is router: continue #ignoro el paso de mover paquetes hacia si mismo
+                long_cola = router.long_cola_vecino(vecino)                
+                if long_cola==0: continue #si la cola a un vecino está vacia, la ignoro y sigo con el siguiente vecino
+                tasa = self.red.get_edge(router,vecino)[1]
+                costo = int(long_cola/int(tasa/tam_paquete)) 
+                self.red.add_edge(router, vecino, [costo ,tasa])
             
-        
-        
-        
-        
-        
-        
+         #donde costo = Cola[vecino]/floor(tasa/tam_paquete)
 
 ###Clase Pagina###
 
