@@ -107,27 +107,40 @@ class Router:
                     
     
     def encolar(self, paquetes, r_vecino):
-        """agrega los paquetes a la cola correspondiente al vecino indicado. Si el vecino no existe devuelve un error"""
+        """agrega los paquetes al principio de la cola correspondiente al vecino indicado. Si el vecino no existe devuelve un error
+        la cola es tipo FIFO
+        """
+        
+        self.cola_vecino[r_vecino.id_router].extend(paquetes)
+        #agrego todos los paquetes en la cola hacia el router vecino
+        #si es el destino final de los paquetes, analizo completitud
+        if self is r_vecino: 
+            self.analizar_completitud(r_vecino)
+
         
         
-        try:
-            self.cola_vecino[r_vecino.id_router].extend(paquetes)
-            #agrego todos los paquetes en la cola hacia el router vecino
-            #si es el destino final de los paquetes, analizo completitud
-##            if self == r_vecino: 
+        
+##        try:
+##            self.cola_vecino[r_vecino.id_router].extend(paquetes)
+##            #agrego todos los paquetes en la cola hacia el router vecino
+##            #si es el destino final de los paquetes, analizo completitud
+##            if self is r_vecino: 
+##                print "analizar completitud"
 ##                self.analizar_completitud(r_vecinos)
-        except:
-            print "vecino no valido"
+##        except:
+##            print "vecino no valido"
     
     def desencolar(self, r_vecino,cant_paquetes):
         """devuelve una cantidad de paquetes del final de la cola hacia el vecino especificado"""
         
-        #desencolo los ultimos 'cant_paquetes'
+        #desencolo los or 'cant_paquetes'
         paq = self.cola_vecino[r_vecino.id_router][-cant_paquetes:]
         #actualizo la cola
         self.cola_vecino[r_vecino.id_router] = self.cola_vecino[r_vecino.id_router][:-cant_paquetes]
         #devuelvo
         return paq
+    
+     
     
     def analizar_completitud(self, r_vecino):
         """analiza la cola hacia el vecino en busca de una pagina completa. Si la encuentra la quita de la cola y entrega"""
@@ -137,27 +150,28 @@ class Router:
         cola_parcial = {}
         #separo los paquetes segun la pagina que correspondan
         for paquete in self.cola_vecino[r_vecino.id_router]:
-            cola_parcial[paquete.id_pagina] = cola_parcial[paquete.id_pagina] + 1
+            try: 
+                cola_parcial[paquete.id_pagina].append(paquete)
+            except:
+                cola_parcial[paquete.id_pagina] = []
+                cola_parcial[paquete.id_pagina].append(paquete)
+                
 
-        print "cola pacial:"+`cola_parcial` 
+#        print "cola pacial:"+`cola_parcial` 
 
         #evaluo si la cantidad de paquetes de la pagina esta completa. el dato lo saco del primer paquete
-##        for id_pagina in cola_parcial.keys():
-##            if cola_parcial[id_pagina][0].total == len(cola_parcial[id_pagina][0]):
-##                print "Se ha completado la pagina Nº"+`id_pagina`
-##                ###esto habria que hacerlo en otro lado###
-##                
-##                print "ordenando paquetes y generando pagina..."
-##                data_paquetes_ord = []
-##                for paquete in cola_parcial[id_pagina]:
-##                    data_paquetes_ord[paquete.id_paquete] = paquete.data
-##                print "pagina generada. Entregando a "+`paquete.ip_destino`
-##                print "Data: "+str.join(data_paquetes_ord)
-##                
-##                print "quitando los paquetes de esta pagina de la cola"
-##                for paquete in cola_parcial[id_pagina]:
-##                    #quito el paquete (posicion index donde se encuentra el paquete 'paquete' de la cola al vecino
-##                    del self.cola_vecino[r_vecino.id_router][self.cola_vecino[r_vecino.id_router].index(paquete)]
+        for id_pagina in cola_parcial.keys():
+            if cola_parcial[id_pagina][0].total == len(cola_parcial[id_pagina]):
+                print "----Se ha completado la pagina Nº"+`id_pagina`+ "hacia "+ `cola_parcial[id_pagina][0].ip_destino`+" ----"
+                
+                ###completar! habria que ordenar los paquetes y mostrar la pagina.  ###
+                    
+                #quitando los paquetes de esta pagina de la cola"
+                for paquete in cola_parcial[id_pagina]:
+                    #quito el paquete (posicion index donde se encuentra el paquete 'paquete' de la cola al vecino
+                    del self.cola_vecino[r_vecino.id_router][self.cola_vecino[r_vecino.id_router].index(paquete)]
+                print "despues:"
+                
 
         
     def __repr__(self):
@@ -347,37 +361,40 @@ class Admin2:
         else:
             return camino[0]
         
-    def paso(self):
+    def paso(self, iteraciones=1):
         """Paso envia secuencialmente la cantidad de paquetes posibles a cada vecino.        
         """
         global tam_paquete
         
-        for router in self.red.nodes():
-            #por cada vecino del router de la red, envio la cantidad posible de paquetes hacia el siguiente router
-            
-            for vecino in [self.lista_routers[x] for x in router.cola_vecino.keys()]:
-                if vecino is router: continue #ignoro el paso de mover paquetes hacia si mismo
-                long_cola = router.long_cola_vecino(vecino)                
-                if long_cola==0: continue #si la cola a un vecino está vacia, la ignoro y sigo con el siguiente vecino
+        while iteraciones>0:
+            iteraciones -= 1 #decremento el numero de iteraciones
+            if iteraciones>0: print "********* Iteracion "+`iteraciones`+" **************"
+            for router in self.red.nodes():
+                #por cada vecino del router de la red, envio la cantidad posible de paquetes hacia el siguiente router
                 
-                
-                #determino la cantidad de paquetes que se pueden enviar. Si la cantidad en la cola es menor a lo posible, los tomo todos. 
-                tasa = self.red.get_edge(router,vecino)[1]
-                cant_paquetes = int(tasa/tam_paquete) if int(tasa/tam_paquete) < long_cola else long_cola
-                print "****Moviendo "+`cant_paquetes`+" paquetes desde "+`router`+" hacia "+`vecino`+ "(tasa "+`tasa`+")"
-                
-                #desencolo la cantidad de paquetes de la cola del router.    
-                paquetes = router.desencolar(vecino, cant_paquetes)
-                
-                #por cada paquete (porque pueden tener distintos destinos), 
-                #encuentro cual es su destino final y encolo al siguiente paso del camino hasta alli
-                for paquete in paquetes:
-                    router_destino = self.lista_routers[paquete.ip_destino.id_router]
-                    #sabiendo el destino encuentro el siguiente paso. 
-                    siguiente = self.determinar_vecino(vecino, router_destino)
-                    print "destino: "+ `router_destino` + " Siguiente : "+ `siguiente`
-                    #encolo el paquete al siguiente paso
-                    vecino.encolar([paquete], siguiente)  #convierto paquetes en un secuencia de 1 elemento
+                for vecino in [self.lista_routers[x] for x in router.cola_vecino.keys()]:
+                    if vecino is router: continue #ignoro el paso de mover paquetes hacia si mismo
+                    long_cola = router.long_cola_vecino(vecino)                
+                    if long_cola==0: continue #si la cola a un vecino está vacia, la ignoro y sigo con el siguiente vecino
+                    
+                    
+                    #determino la cantidad de paquetes que se pueden enviar. Si la cantidad en la cola es menor a lo posible, los tomo todos. 
+                    tasa = self.red.get_edge(router,vecino)[1]
+                    cant_paquetes = int(tasa/tam_paquete) if int(tasa/tam_paquete) < long_cola else long_cola
+                    print "****Moviendo "+`cant_paquetes`+" paquetes desde "+`router`+" hacia "+`vecino`+ "(tasa "+`tasa`+")"
+                    
+                    #desencolo la cantidad de paquetes de la cola del router.    
+                    paquetes = router.desencolar(vecino, cant_paquetes)
+                    
+                    #por cada paquete (porque pueden tener distintos destinos), 
+                    #encuentro cual es su destino final y encolo al siguiente paso del camino hasta alli
+                    for paquete in paquetes:
+                        router_destino = self.lista_routers[paquete.ip_destino.id_router]
+                        #sabiendo el destino encuentro el siguiente paso. 
+                        siguiente = self.determinar_vecino(vecino, router_destino)
+                        print "destino: "+ `router_destino` + " Siguiente : "+ `siguiente`
+                        #encolo el paquete al siguiente paso
+                        vecino.encolar([paquete], siguiente)  #convierto paquetes en un secuencia de 1 elemento
                 
                 
                 
