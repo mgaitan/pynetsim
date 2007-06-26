@@ -110,25 +110,17 @@ class Router:
         """agrega los paquetes al principio de la cola correspondiente al vecino indicado. Si el vecino no existe devuelve un error
         la cola es tipo FIFO
         """
-        
-        self.cola_vecino[r_vecino.id_router].extend(paquetes)
-        #agrego todos los paquetes en la cola hacia el router vecino
-        #si es el destino final de los paquetes, analizo completitud
-        if self is r_vecino: 
-            self.analizar_completitud(r_vecino)
-
+         
         
         
-        
-##        try:
-##            self.cola_vecino[r_vecino.id_router].extend(paquetes)
-##            #agrego todos los paquetes en la cola hacia el router vecino
-##            #si es el destino final de los paquetes, analizo completitud
-##            if self is r_vecino: 
-##                print "analizar completitud"
-##                self.analizar_completitud(r_vecinos)
-##        except:
-##            print "vecino no valido"
+        try:
+            self.cola_vecino[r_vecino.id_router].extend(paquetes)
+            #agrego todos los paquetes en la cola hacia el router vecino
+            #si es el destino final de los paquetes, analizo completitud
+            if self is r_vecino: 
+                self.analizar_completitud(r_vecinos)
+        except:
+            print "vecino no valido"
     
     def desencolar(self, r_vecino,cant_paquetes):
         """devuelve una cantidad de paquetes del final de la cola hacia el vecino especificado"""
@@ -143,7 +135,9 @@ class Router:
      
     
     def analizar_completitud(self, r_vecino):
-        """analiza la cola hacia el vecino en busca de una pagina completa. Si la encuentra la quita de la cola y entrega"""
+        """
+        
+        analiza la cola hacia el vecino en busca de una pagina completa. Si la encuentra la quita de la cola y entrega"""
 
         print "analizando completitud"
 
