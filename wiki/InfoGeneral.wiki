@@ -11,10 +11,10 @@ esta version esta funcional:
   * tiene un modo "demo" para ver informacion de los distinto objetos e interactuar. 
   * implementacion basica de 'pedir_pagina' que determina en que terminal se encuentra un determinada pagina, la empaqueta, y mueve todos los paquetes al al router inmediato en la cola correspondiente al siguiente paso. 
 
-==TO DO==
+==To Do==
 -----
   * funcion paso: tomar la cantidad maxima de paquetes de una cola y moverlos hacia otra. Deberia ser una funcion atomica para todos los routers al mismo tiempo. 
-- En el problema original, los caminos se recalculaban cada cierta cantidad de pasos. Aqui podria ser en cada paso, ya que el control siempre lo tiene la red misma, clase Admin2()
+  * En el problema original, los caminos se recalculaban cada cierta cantidad de pasos. Aqui podria ser en cada paso, ya que el control siempre lo tiene la red misma, clase Admin2()
   * graficar estado de colas
   * graficar paso a paso
   * modo demo mediante interfaz de usuario grafica..ç
@@ -34,7 +34,6 @@ esta version esta funcional:
 
 {{{
 import clases
-lared = clases.Admin()
+lared = clases.Admin2()
 lared.demo()
 }}}
-
