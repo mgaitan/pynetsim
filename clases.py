@@ -6,12 +6,9 @@
 #Enero de 2007
 #clases.py
 
-import funciones
 import random
-import pydot 
 import networkx
-import pylab as P
-import matplotlib
+import pylab, matplotlib
 import string
 from copy import copy
 
@@ -31,21 +28,7 @@ grabar_archivo = False
 nombre_archivo = "datos.dat"
 fijo=True
 
-def empaquetar(pagina, ip_destino, tam=tam_paquete):
-    """recibe una pagina y devuelve una lista de paquetes"""
-    
-    global tam_paquete
-    
-    paquetes = []
-    total = int(pagina.long/tam_paquete)+1
 
-    print "Total: "+`total`
-    
-    for i in range(total):
-        data = pagina.data[i*tam:(i+1)*tam]
-        paq = Paquete(i, pagina.id_pagina,total, pagina.ip_origen, ip_destino, data)
-        paquetes.append(paq)
-    return paquetes
     
     
 
@@ -56,7 +39,7 @@ def dibujar(grafo, edges=False, pos=False):
     if not edges: edges = grafo.edges()
     if not pos: pos = networkx.drawing.spring_layout(grafo)
     
-    P.clf()     #limpio la figura actual
+    pylab.clf()     #limpio la figura actual
     F=networkx.XGraph()
     F.add_edges_from(edges)
     ax=matplotlib.pylab.gca()
@@ -65,8 +48,8 @@ def dibujar(grafo, edges=False, pos=False):
     edge_pos = dict( ((n1,n2),(pos[n1]+pos[n2])/2) for n1,n2,v in F.edges() )
     edge_labels = dict( ((x,y), z) for x,y,z in F.edges() )
     networkx.draw_networkx_labels(grafo, edge_pos, edge_labels)
-    networkx.draw_networkx(grafo, pos, True)
-    P.show()
+    networkx.draw_networkx(grafo, pos, True)   
+    pylab.show()
 
 
 class Router:
@@ -266,58 +249,12 @@ class Admin2:
         
 
     def mostrar(self):       
+        
         edges = [ (x,y,z) for x,y,z in self.red.edges() ]
         dibujar(self.red, edges, self.pos)
         return "ok"
 
-    def demo(self):
-        """un metodo para obetener informacion en forma dinamica"""
-        while 1:
-            print "##############################"
-            print "a :\t info Red"
-            print "t :\t info terminal"
-            print "p :\t info pagina"
-            print "g :\t ver grafo de red"
-            print "r :\t info router"
-            print "e :\t empaquetar pagina"
-            print "d :\t pedir pagina"
-            print "s :\t paso"
-            print "S :\t salir"
-            opcion = raw_input("Ingrese opcion: ")
-            
-            if opcion=='S': 
-                break
-            elif opcion=='a':
-                self.info()
-            elif opcion=='t':
-                t = raw_input("Ingrese id terminal: ")
-                if t=='s': break
-                term = self.lista_terminales[int(t)]
-                funciones.separador("el terminal tiene los siguientes datos")
-                term.info()
-            elif opcion=='p':
-                p = raw_input("Ingrese id_pagina: ")
-                if p=='s': break
-                pag = self.lista_paginas[int(p)]
-                print pag
-            elif opcion=='g':
-                self.mostrar()
-            elif opcion=='r':
-                p = raw_input("Ingrese id_router: ")
-                print  self.lista_routers[int(p)].info()
-                print  "vecinos: "+ `self.red.neighbors(self.lista_routers[int(p)])`
-            elif opcion=='e':
-                p = raw_input("Ingrese id_pagina: ")
-                t = raw_input("Ingrese id terminal de destino: ")
-                if p=='s' or t=='s': break
-                print empaquetar(self.lista_paginas[int(p)],self.lista_terminales[int(t)].ip_terminal)
-            elif opcion=='d':
-                p = raw_input("Ingrese id_pagina: ")
-                t = raw_input("Ingrese id terminal de destino: ")
-                if p=='s' or t=='s': break
-                self.pedir_pagina(self.lista_paginas[int(p)],self.lista_terminales[int(t)])
-            elif opcion=='s':
-                self.paso()
+   
             
     def pedir_pagina(self, pagina, t_destino):
         #empaqueto la pagina
@@ -325,7 +262,7 @@ class Admin2:
         if pagina.__class__.__name__ == "int": pagina = self.lista_paginas[pagina]
         if t_destino.__class__.__name__ == "int" : t_destino = self.lista_terminales[t_destino]
         
-        paquetes = empaquetar(pagina, t_destino.ip_terminal)
+        paquetes = pagina.empaquetar(t_destino.ip_terminal)
         
         print "Se ha solicitado la pagina "+`pagina.id_pagina`
         print "IP origen: "+`pagina.ip_origen`
@@ -437,6 +374,55 @@ class Admin2:
         self.mostrar() #para que se actualice la red.
          
         
+    def demo(self):
+        """un metodo para obetener informacion e interactuar en forma dinamica a traves de un menu"""
+        #no está completo! 
+        while 1:
+            print "##############################"
+            print "a :\t info Red"
+            print "t :\t info terminal"
+            print "p :\t info pagina"
+            print "g :\t ver grafo de red"
+            print "r :\t info router"
+            print "e :\t empaquetar pagina"
+            print "d :\t pedir pagina"
+            print "s :\t paso"
+            print "S :\t salir"
+            opcion = raw_input("Ingrese opcion: ")
+            
+            if opcion=='S': 
+                break
+            elif opcion=='a':
+                self.info()
+            elif opcion=='t':
+                t = raw_input("Ingrese id terminal: ")
+                if t=='s': break
+                term = self.lista_terminales[int(t)]
+                print "---el terminal tiene los siguientes datos"
+                term.info()
+            elif opcion=='p':
+                p = raw_input("Ingrese id_pagina: ")
+                if p=='s': break
+                pag = self.lista_paginas[int(p)]
+                print pag
+            elif opcion=='g':
+                self.mostrar()
+            elif opcion=='r':
+                p = raw_input("Ingrese id_router: ")
+                print  self.lista_routers[int(p)].info()
+                print  "vecinos: "+ `self.red.neighbors(self.lista_routers[int(p)])`
+            elif opcion=='e':
+                p = raw_input("Ingrese id_pagina: ")
+                t = raw_input("Ingrese id terminal de destino: ")
+                if p=='s' or t=='s': break
+                print self.lista_paginas[int(p)].empaquetar(self.lista_terminales[int(t)].ip_terminal)
+            elif opcion=='d':
+                p = raw_input("Ingrese id_pagina: ")
+                t = raw_input("Ingrese id terminal de destino: ")
+                if p=='s' or t=='s': break
+                self.pedir_pagina(self.lista_paginas[int(p)],self.lista_terminales[int(t)])
+            elif opcion=='s':
+                self.paso()
 
 ###Clase Pagina###
 
@@ -456,6 +442,20 @@ class Pagina:
                 self.data += random.choice(vocales)
             else:
                 self.data += random.choice(otros)
+    
+    def empaquetar(self, ip_destino, tam=tam_paquete):
+        """recibe una pagina y devuelve una lista de paquetes"""
+        
+        global tam_paquete
+        
+        paquetes = []
+        total = int(self.long/tam_paquete)+1
+        
+        for i in range(total):
+            data = self.data[i*tam:(i+1)*tam]
+            paq = Paquete(i, self.id_pagina,total, self.ip_origen, ip_destino, data)
+            paquetes.append(paq)
+        return paquetes
         
     def __len__(self):
         return self.long
@@ -486,8 +486,10 @@ class Terminal:
     
     def set_pagina(self, pagina):
         self.paginas.append(pagina)
+        
     def __repr__(self):
         return "T: "+`self.ip_terminal`
+    
     def info(self):
         print self
         print "Cantidad de paginas: "+`len(self.paginas)`
