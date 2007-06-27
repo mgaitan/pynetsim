@@ -13,6 +13,7 @@ import networkx
 import pylab as P
 import matplotlib
 import string
+from copy import copy
 
 """en este fuente se definen las clases router, adminitrador, pagina, paquete, etc. 
 las clases no heredan sino que interactuan a nivel de instanciacion: ie, una pagina se compone de n cantidad de paquetes
@@ -23,7 +24,7 @@ max_cant_term = 5
 max_cant_pag = 4
 asincronico = False #define si el peso de las aristas es simetrico o no
 max_conectividad = 2 #variable estimativa. con cuantos vecinos como maximo puede conectarse un router 
-max_transferencia = 45 #velicidad de transfencia max entre un router y otro (en caracteres)
+max_transferencia = 30 #velicidad de transfencia max entre un router y otro (en caracteres)
 tam_paquete = 3        #cuantos caracteres maximo forman un paquete?
 leer_archivo = False    #si no se lee genera un grafo aleatorio y lo guarda
 grabar_archivo = False
@@ -49,12 +50,13 @@ def empaquetar(pagina, ip_destino, tam=tam_paquete):
     
 
 def dibujar(grafo, edges=False, pos=False):
-    """esta funcion dibuja la red (grafo) incluyendo label en las aristas
-        edges es una tupla triple del tipo (n1,n2,valor)
+    """esta funcion dibuja la red (grafo) incluyendo label en los puentes
+        edges es una tupla triple del tipo (n1,n2,valor). La inclusion del label en el puente se hace a mano. 
     """
     if not edges: edges = grafo.edges()
     if not pos: pos = networkx.drawing.spring_layout(grafo)
     
+    P.clf()     #limpio la figura actual
     F=networkx.XGraph()
     F.add_edges_from(edges)
     ax=matplotlib.pylab.gca()
@@ -110,6 +112,7 @@ class Router:
         """agrega los paquetes al principio de la cola correspondiente al vecino indicado. Si el vecino no existe devuelve un error
         la cola es tipo FIFO
         """
+
         
         try:
             self.cola_vecino[r_vecino.id_router].extend(paquetes)
@@ -162,9 +165,11 @@ class Router:
                 for paquete in cola_parcial[id_pagina]:
                     #quito el paquete (posicion index donde se encuentra el paquete 'paquete' de la cola al vecino
                     del self.cola_vecino[r_vecino.id_router][self.cola_vecino[r_vecino.id_router].index(paquete)]
-                print "despues:"
                 
-
+    
+    def actualizar_cola(self, nueva_cola):
+        self.cola_vecino = nueva_cola
+    
         
     def __repr__(self):
         return "R"+`self.id_router`
@@ -224,7 +229,7 @@ class Admin2:
                 vecinos_asignados = random.sample(posibles, random.choice(range(1, max +1 )))
                 for x in vecinos_asignados:
                     tasa = random.choice(range(tam_paquete, max_transferencia)) #el minimo es el tamaño de 1 paquete
-                    self.red.add_edge(router, x, [0 ,tasa])
+                    self.red.add_edge(router, x, [1 ,tasa])
                     #inicializo las colas
                     router.cola_vecino[x.id_router] = []
                     x.cola_vecino[router.id_router] = []
@@ -385,6 +390,8 @@ class Admin2:
                     #por cada paquete (porque pueden tener distintos destinos), 
                     #encuentro cual es su destino final y encolo al siguiente paso del camino hasta alli
                     for paquete in paquetes:
+                        print "Paquete*****"+ `paquete`
+                        #hack..en alguna vuelta no se donde convierte al paquete en una lista. 
                         router_destino = self.lista_routers[paquete.ip_destino.id_router]
                         #sabiendo el destino encuentro el siguiente paso. 
                         siguiente = self.determinar_vecino(vecino, router_destino)
@@ -395,21 +402,41 @@ class Admin2:
     def actualizar(self):
         """este metodo actualiza los valores del primer valor en la arista, que representa
         el costo (en ciclos) que representa enviar los paquetes entre un nodo y otro. 
+        
         En este punto, interfiere la carga actual de la red. 
         Por ejemplo, por más que Entre 1 y 3 hay una conexion rapida, pero hay muchos paquetes hacia 3, 
         entonces será preferible enviarla por otro camino. 
+        
+        Ademas del valor, se deben actualizar las colas de cada router, esto es, desencolar cada paquete y encolarlo en la cola que corresponda al nuevo camino hacia el destino. 
         """
         global tam_paquete
         for router in self.red.nodes():
-            for vecino in [self.lista_routers[x] for x in router.cola_vecino.keys()]:
+            router.cola_temp ={} #cola temporal
+            for vecino in [self.lista_routers[x] for x in router.cola_vecino.keys()]:             
+                router.cola_temp[vecino.id_router] = [] #incializo la cola temporal hacia el nuevo vecino
                 if vecino is router: continue #ignoro el paso de mover paquetes hacia si mismo
                 long_cola = router.long_cola_vecino(vecino)                
                 if long_cola==0: continue #si la cola a un vecino está vacia, la ignoro y sigo con el siguiente vecino
                 tasa = self.red.get_edge(router,vecino)[1]
                 costo = int(long_cola/int(tasa/tam_paquete)) 
+                #actualizo el valor de costo de transferencia actual entre dos routers. 
                 self.red.add_edge(router, vecino, [costo ,tasa])
+                
+        for router in self.red.nodes():
+           
+            for vecino in [self.lista_routers[x] for x in router.cola_vecino.keys()]:
+                #actualizo las colas de router (para cada vecino). 
+                for i in range(router.long_cola_vecino(vecino)):
+                    paquete = router.desencolar(vecino, 1) #desencolo el paquete en cuestion. 
+                    paquete = paquete[0]  #el metodo desencolar devuelve una lista, aunque sea 1 elemento
+                    router_destino = self.lista_routers[paquete.ip_destino.id_router] #extraigo el destino final del paquete
+                    siguiente = self.determinar_vecino(router, router_destino) #sabiendo el destino encuentro el nuevo siguiente paso. 
+                    router.cola_temp[siguiente.id_router].append(paquete) 
             
-         #donde costo = Cola[vecino]/floor(tasa/tam_paquete)
+            router.actualizar_cola(router.cola_temp)
+        self.mostrar() #para que se actualice la red.
+         
+        
 
 ###Clase Pagina###
 
@@ -499,10 +526,9 @@ class Paquete:
 ad = Admin2()
 ad.mostrar()
 ###ad.demo()
-p = ad.lista_paginas[1] #probablemente en el primer router
-t = ad.lista_terminales[10] #en algun router subsecuente
-
-ad.pedir_pagina(p,t)
+ad.pedir_pagina(1,6)
+ad.pedir_pagina(3,3)
+ad.pedir_pagina(5,5)
 
 
 
