@@ -14,6 +14,8 @@ esta version esta funcional:
 ==To Do==
 -----
   * funcion paso: tomar la cantidad maxima de paquetes de una cola y moverlos hacia otra. Deberia ser una funcion atomica para todos los routers al mismo tiempo. 
+¿Y qué tal si hacemos una clase conexión, que tenga un método de inserción de paquetes en el cable y que no permita hacerlo si la conexión está saturada y a la vez que de los paquetes por el otro extremo al dispositivo destino? No se si esto cuadra con como lo estuviste pensando, pero tiro la idea.
+
   * En el problema original, los caminos se recalculaban cada cierta cantidad de pasos. Aqui podria ser en cada paso, ya que el control siempre lo tiene la red misma, clase Admin2()
   * graficar estado de colas
   * graficar paso a paso
