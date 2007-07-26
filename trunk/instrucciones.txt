@@ -1,0 +1,30 @@
+*El programa circulo_y_cursor.py:
+    -Necesita de las librerías pyode y pygame, además
+    de la instalación base de python.
+    - Ejecución: 
+	- Desde linux (2 formas): 
+	    - ./circulo_y_cursor.py
+	    - python circulo_y_cursor.py
+    - Uso: mover el mouse sobre la pantalla del juego, se mueve acompañando
+    el movimiento del mouse, el círculo negro, que puede impactar con los
+    otros elementos del juego
+
+*El programa escenario_y_cosas.py
+    - Necesita de las librerías PyODE y PyOpenGL
+    - Ejecución: 
+	- Desde linux (2 formas): 
+	    - ./escenario_y_cosas.py
+	    - python escenario_y_cosas.py
+    - Uso:
+	Solo se observan bloques y esferas cayendo y rebotando entre ellas
+    
+
+Objetivo de los programas nombrados anteriormente:
+-Mostrar el funcionamiento de Python "as a glue", utilizándolo como herramienta
+para binding entre librerías (en este caso físicas, ODE, y gráficas, OpenGL,
+teniendo en cuenta que Pygame es una librería de binding con SDL)
+-Mostrar la capacidad del lenguaje, como lenguaje de scripting (ver la forma del 
+código, sin objetos)
+- Mostrar que se pueden dejar funciones pendientes (vacías) con la llamada
+"pass"
+- Mostrar programas en desarrollo en el lenguaje Python
