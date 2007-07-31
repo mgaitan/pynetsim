@@ -2,9 +2,26 @@
 # -*- coding: utf8 -*-
 
 #simulador de trafico por internet implementado en Python. 
-#Martin Gaitan y Leo Rocha
+#Martin Gaitan y Leonardo Rocha
 #Enero de 2007
 #clases.py
+
+##Requerimientos
+##
+##    * requiere python 2.5 (por las formas cortas de la sentencia if)
+##    * libreria networkx . En ubuntu/debian: #apt-get install python-networkx
+##    * libreria matplotlib/pylab para graficar : #apt-get install python-matplotlib 
+##
+##Ejecucion basica
+##
+##import clases
+##lared = clases.Admin2()
+##lared.demo()
+## Forma de Uso interactiva:
+##Abrir una consola interactiva de Python en el directorio donde se encuentra el archivo.
+##en el prompt:
+##>>> import clases
+##se inicia el programa interactivo de forma automática
 
 import random
 import networkx
@@ -39,7 +56,7 @@ def dibujar(grafo, edges=False, pos=False):
     if not edges: edges = grafo.edges()
     if not pos: pos = networkx.drawing.spring_layout(grafo)
     
-    pylab.clf()     #limpio la figura actual
+    pylab.clf()     #limpia la figura actual
     F=networkx.XGraph()
     F.add_edges_from(edges)
     ax=matplotlib.pylab.gca()
@@ -388,6 +405,14 @@ class Admin2:
             print "d :\t pedir pagina"
             print "s :\t paso"
             print "S :\t salir"
+            print "##############################"
+            print "Cada momento de simulación consta de:"
+            print "pedir una o más páginas y"
+            print "luego llamar a la función paso"
+            print "puede luego observarse viendo el grafo"
+            print "o pedir la información de la red, "
+            print "terminales, páginas o routers."
+            print "##############################"
             opcion = raw_input("Ingrese opcion: ")
             
             if opcion=='S': 
@@ -524,14 +549,14 @@ class Paquete:
 
 ##################### MAIN #########################
 
-
+##
 ad = Admin2()
-ad.mostrar()
-###ad.demo()
-ad.pedir_pagina(1,6)
-ad.pedir_pagina(3,3)
-ad.pedir_pagina(5,5)
-
+ad.demo()
+##ad.mostrar()
+##ad.pedir_pagina(1,6)
+##ad.pedir_pagina(3,3)
+##ad.pedir_pagina(5,5)
+##ad.
 
 
 ##if not leer_archivo:
