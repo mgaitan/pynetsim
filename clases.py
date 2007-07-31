@@ -17,7 +17,11 @@
 ##import clases
 ##lared = clases.Admin2()
 ##lared.demo()
-## Forma de Uso interactiva:
+## Forma de Uso:
+## en la consola escribir:
+##$ python clases.py (esto inicia el programa)
+##
+##Otra forma, con la consola de Python:
 ##Abrir una consola interactiva de Python en el directorio donde se encuentra el archivo.
 ##en el prompt:
 ##>>> import clases
