@@ -116,7 +116,7 @@ class Router:
         
         try:
             self.cola_vecino[r_vecino.id_router].extend(paquetes)
-            #agrego todos los paquetes en la cola hacia el router vecino
+            #agrega todos los paquetes en la cola hacia el router vecino
             #si es el destino final de los paquetes, analizo completitud
             if self is r_vecino: 
                 self.analizar_completitud(r_vecino)
@@ -126,11 +126,11 @@ class Router:
     def desencolar(self, r_vecino,cant_paquetes):
         """devuelve una cantidad de paquetes del final de la cola hacia el vecino especificado"""
         
-        #desencolo los or 'cant_paquetes'
+        #desencola los or 'cant_paquetes'
         paq = self.cola_vecino[r_vecino.id_router][-cant_paquetes:]
-        #actualizo la cola
+        #actualiza la cola
         self.cola_vecino[r_vecino.id_router] = self.cola_vecino[r_vecino.id_router][:-cant_paquetes]
-        #devuelvo
+        #devuelve
         return paq
     
      
@@ -143,7 +143,7 @@ class Router:
         print "analizando completitud"
 
         cola_parcial = {}
-        #separo los paquetes segun la pagina que correspondan
+        #separa los paquetes según la pagina que correspondan
         for paquete in self.cola_vecino[r_vecino.id_router]:
             try: 
                 cola_parcial[paquete.id_pagina].append(paquete)
@@ -154,7 +154,7 @@ class Router:
 
 #        print "cola pacial:"+`cola_parcial` 
 
-        #evaluo si la cantidad de paquetes de la pagina esta completa. el dato lo saco del primer paquete
+        #evalúa si la cantidad de paquetes de la pagina esta completa. el dato lo saco del primer paquete
         for id_pagina in cola_parcial.keys():
             if cola_parcial[id_pagina][0].total == len(cola_parcial[id_pagina]):
                 print "----Se ha completado la pagina Nº"+`id_pagina`+ "hacia "+ `cola_parcial[id_pagina][0].ip_destino`+" ----"
@@ -163,7 +163,7 @@ class Router:
                     
                 #quitando los paquetes de esta pagina de la cola"
                 for paquete in cola_parcial[id_pagina]:
-                    #quito el paquete (posicion index donde se encuentra el paquete 'paquete' de la cola al vecino
+                    #quita el paquete (posicion index donde se encuentra el paquete 'paquete' de la cola al vecino
                     del self.cola_vecino[r_vecino.id_router][self.cola_vecino[r_vecino.id_router].index(paquete)]
                 
     
@@ -204,7 +204,7 @@ class Admin2:
         
     
         if leer_archivo:
-        #leo el grafo desde un archivo
+        #lee el grafo desde un archivo
             self.red = networkx.read_adjlist(nombre_archivo)
         else:
         #create empty directed graph with edge data.     
@@ -220,7 +220,7 @@ class Admin2:
             
             
             for router in self.red.nodes():
-                #agrego una cantidad de vecinos al azar para cada router
+                #agrega una cantidad de vecinos al azar para cada router
                 posibles = self.red.nodes()
                 for vec_actual in [self.lista_routers[x] for x in router.cola_vecino.keys()]:
                     posibles.remove(vec_actual)
@@ -230,12 +230,12 @@ class Admin2:
                 for x in vecinos_asignados:
                     tasa = random.choice(range(tam_paquete, max_transferencia)) #el minimo es el tamaño de 1 paquete
                     self.red.add_edge(router, x, [1 ,tasa])
-                    #inicializo las colas
+                    #inicializa las colas
                     router.cola_vecino[x.id_router] = []
                     x.cola_vecino[router.id_router] = []
         self.pos = networkx.drawing.spring_layout(self.red) #fijo la posicion de los nodos del grafo        
 
-        #genero terminales aleatoriamente y paginas dentro de el. Se lleva un diccionario 
+        #genera terminales aleatoriamente y paginas dentro de el. Se lleva un diccionario 
         #para el admin tenga i  nformacion para buscar terminales y paginas mediante su id
         counter = 0
         counter_p = 0
@@ -247,7 +247,7 @@ class Admin2:
                 router.set_terminal(t)   #lo asigno a un router
                 self.lista_terminales[counter] = t   #lo agrego al diccionario para busquedas rapidas mediante id
         
-        #genero paginas aleotariamente. Cada terminal tiene al menos 1 pagina.
+        #genera paginas aleotariamente. Cada terminal tiene al menos 1 pagina.
 
             for terminal in router.terminales:
                 for i in range(1, random.choice(range(max_cant_pag))):
@@ -274,7 +274,7 @@ class Admin2:
    
             
     def pedir_pagina(self, pagina, t_destino):
-        #empaqueto la pagina
+        #empaqueta la pagina
         
         if pagina.__class__.__name__ == "int": pagina = self.lista_paginas[pagina]
         if t_destino.__class__.__name__ == "int" : t_destino = self.lista_terminales[t_destino]
@@ -287,7 +287,7 @@ class Admin2:
         r = t_destino.ip_terminal.id_router
 
         
-        #y muevo los paquetes al primer router del camino
+        #y mueve los paquetes al primer router del camino
         vecino = self.determinar_vecino(self.lista_routers[pagina.ip_origen.id_router], self.lista_routers[t_destino.ip_terminal.id_router])       
         
         
@@ -323,34 +323,33 @@ class Admin2:
         
         vuelta = 0
         while vuelta<iteraciones:
-            vuelta += 1 #decremento el numero de iteraciones
+            vuelta += 1 #decrementa el numero de iteraciones
             if iteraciones>0: print "********* Iteracion "+`vuelta`+" **************"
             for router in self.red.nodes():
-                #por cada vecino del router de la red, envio la cantidad posible de paquetes hacia el siguiente router
+                #por cada vecino del router de la red, envia la cantidad posible de paquetes hacia el siguiente router
                 
                 for vecino in [self.lista_routers[x] for x in router.cola_vecino.keys()]:
-                    if vecino is router: continue #ignoro el paso de mover paquetes hacia si mismo
+                    if vecino is router: continue #ignora el paso de mover paquetes hacia si mismo
                     long_cola = router.long_cola_vecino(vecino)                
                     if long_cola==0: continue #si la cola a un vecino está vacia, la ignoro y sigo con el siguiente vecino
                     
-                    #determino la cantidad de paquetes que se pueden enviar. Si la cantidad en la cola es menor a lo posible, los tomo todos. 
+                    #determina la cantidad de paquetes que se pueden enviar. Si la cantidad en la cola es menor a lo posible, los tomo todos. 
                     tasa = self.red.get_edge(router,vecino)[1]
                     cant_paquetes = int(tasa/tam_paquete) if int(tasa/tam_paquete) < long_cola else long_cola
                     print "****Moviendo "+`cant_paquetes`+" paquetes desde "+`router`+" hacia "+`vecino`+ "(tasa "+`tasa`+")"
                     
-                    #desencolo la cantidad de paquetes de la cola del router.    
+                    #desencola la cantidad de paquetes de la cola del router.    
                     paquetes = router.desencolar(vecino, cant_paquetes)
                     
                     #por cada paquete (porque pueden tener distintos destinos), 
-                    #encuentro cual es su destino final y encolo al siguiente paso del camino hasta alli
+                    #encuentra cual es su destino final y encolo al siguiente paso del camino hasta alli
                     for paquete in paquetes:
                         print "Paquete*****"+ `paquete`
-                        #hack..en alguna vuelta no se donde convierte al paquete en una lista. 
                         router_destino = self.lista_routers[paquete.ip_destino.id_router]
                         #sabiendo el destino encuentro el siguiente paso. 
                         siguiente = self.determinar_vecino(vecino, router_destino)
                         print "destino: "+ `router_destino` + " Siguiente : "+ `siguiente`
-                        #encolo el paquete al siguiente paso
+                        #encola el paquete al siguiente paso
                         vecino.encolar([paquete], siguiente)  #convierto paquetes en un secuencia de 1 elemento
 
     def actualizar(self):
@@ -367,13 +366,13 @@ class Admin2:
         for router in self.red.nodes():
             router.cola_temp ={} #cola temporal
             for vecino in [self.lista_routers[x] for x in router.cola_vecino.keys()]:             
-                router.cola_temp[vecino.id_router] = [] #incializo la cola temporal hacia el nuevo vecino
-                if vecino is router: continue #ignoro el paso de mover paquetes hacia si mismo
+                router.cola_temp[vecino.id_router] = [] #incializa la cola temporal hacia el nuevo vecino
+                if vecino is router: continue #ignora el paso de mover paquetes hacia si mismo
                 long_cola = router.long_cola_vecino(vecino)                
                 if long_cola==0: continue #si la cola a un vecino está vacia, la ignoro y sigo con el siguiente vecino
                 tasa = self.red.get_edge(router,vecino)[1]
                 costo = int(long_cola/int(tasa/tam_paquete)) 
-                #actualizo el valor de costo de transferencia actual entre dos routers. 
+                #actualiza el valor de costo de transferencia actual entre dos routers. 
                 self.red.add_edge(router, vecino, [costo ,tasa])
                 
         for router in self.red.nodes():
@@ -393,7 +392,6 @@ class Admin2:
         
     def demo(self):
         """un metodo para obetener informacion e interactuar en forma dinamica a traves de un menu"""
-        #no está completo! 
         while 1:
             print "##############################"
             print "a :\t info Red"
@@ -503,10 +501,10 @@ class Terminal:
     """
     
     def __init__(self, ip):
-        self.ip_terminal = ip       #seteo el id del terminal y del router al que esta conectado
+        self.ip_terminal = ip       #setea el id del terminal y del router al que esta conectado
         self.id_router = ip.id_router
         
-        self.paginas = []       #incializo la lista de paginas que contiene este terminal
+        self.paginas = []       #incializa la lista de paginas que contiene este terminal
         
     
     def set_pagina(self, pagina):
