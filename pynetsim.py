@@ -51,6 +51,11 @@ descripcion de cada uno de los elementos ver el archivo
 
 pynetsim.html
 
+Mas info y ultimas versiones
+-----------------------------
+
+http://code.google.com/p/pynetsim/
+
 
 
 """
