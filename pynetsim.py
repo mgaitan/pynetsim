@@ -1,31 +1,59 @@
 #! /usr/bin/env python
 # -*- coding: utf8 -*-
 
-#simulador de trafico por internet implementado en Python. 
-#Martin Gaitan y Leonardo Rocha
-#Enero de 2007
-#clases.py
+"""(c) Martin Gaitan y Leonardo Rocha Junio de 2007.
+Este programa es Software Libre bajo los términos de la licencia GPL 3.0
 
-##Requerimientos
-##
-##    * requiere python 2.5 (por las formas cortas de la sentencia if)
-##    * libreria networkx . En ubuntu/debian: #apt-get install python-networkx
-##    * libreria matplotlib/pylab para graficar : #apt-get install python-matplotlib 
-##
-##Ejecucion basica
-##
-##import clases
-##lared = clases.Admin2()
-##lared.demo()
-## Forma de Uso:
-## en la consola escribir:
-##$ python clases.py (esto inicia el programa)
-##
-##Otra forma, con la consola de Python:
-##Abrir una consola interactiva de Python en el directorio donde se encuentra el archivo.
-##en el prompt:
-##>>> import clases
-##se inicia el programa interactivo de forma automática
+
+
+Requerimientos
+--------------------
+
+    * requiere python 2.5 (por las formas cortas de la sentencia if)
+    * libreria networkx . https://networkx.lanl.gov/wiki
+	
+	En ubuntu/debian: 
+
+	$sudo apt-get install python-networkx
+
+    * libreria matplotlib/pylab para graficar. http://matplotlib.sourceforge.net/
+	
+	$sudo  apt-get install python-matplotlib 
+
+Ejecucion basica
+-----------------------
+
+import pynetsim
+red = pynetsims.Red()
+red.demo()
+
+Forma de Uso:
+----------------------
+en la consola escribir:
+
+$ python pynetsim.py 
+
+(esto inicia el programa en modo no interactivo)
+
+Otra forma, con la consola de Python:
+Abrir una consola interactiva de Python en el directorio donde se encuentra el archivo.
+en el prompt:
+
+>>> import pynetsim
+
+se iniciará el programa interactivo de forma automática
+
+Documentacion
+----------------
+
+El codigo se ha autodocumentado en formato PyDoc (funciones, metodos y demas). Para ver una 
+descripcion de cada uno de los elementos ver el archivo 
+
+pynetsim.html
+
+
+
+"""
 
 import random
 import networkx
@@ -37,20 +65,33 @@ from copy import copy
 las clases no heredan sino que interactuan a nivel de instanciacion: ie, una pagina se compone de n cantidad de paquetes
 """
 
-cant_routers = 5  
-max_cant_term = 5   
-max_cant_pag = 4
-asincronico = False #define si el peso de las aristas es simetrico o no
-max_conectividad = 2 #variable estimativa. con cuantos vecinos como maximo puede conectarse un router 
-max_transferencia = 30 #velicidad de transfencia max entre un router y otro (en caracteres)
-tam_paquete = 3        #cuantos caracteres maximo forman un paquete?
-leer_archivo = False    #si no se lee genera un grafo aleatorio y lo guarda
-grabar_archivo = False
-nombre_archivo = "datos.dat"
-fijo=True
+CANT_ROUTERS = 5	#cantidad de routers en la red
+MAX_TERMINALES = 5   	#maxima cantidad relativa de terminales conectados a cada router 
+MAX_PAGINAS = 4		#maxima cantidad de paginas por terminal
+ASINCRONICO = False 	#define si el peso de las aristas es simetrico o no
+MAX_CONECTIVIDAD = 2 	#variable estimativa. con cuantos vecinos como maximo puede conectarse un router 
+MAX_TRANSFERENCIA = 30 #velicidad de transfencia max entre un router y otro (en caracteres)
+TAM_PAQUETE = 3        #cuantos caracteres maximo forman un paquete?
+LEER_ARCHIVO = False    #si no se lee genera un grafo aleatorio y lo guarda
+GRABAR_ARCHIVO = False
+NOMBRE_ARCHIVO = "datos.dat"
+FIJO=True
 
+def clearscreen(numlines=100):
+    """Clear the console.
 
-    
+    numlines is an optional argument used only as a fall-back.
+    """
+    import os
+    if os.name == "posix":
+        # Unix/Linux/MacOS/BSD/etc
+        os.system('clear')
+    elif os.name in ("nt", "dos", "ce"):
+        # DOS/Windows
+        os.system('CLS')
+    else:
+        # Fallback for other operating systems.
+        print '\n' * numlines    
     
 
 def dibujar(grafo, edges=False, pos=False):
@@ -80,7 +121,7 @@ class Router:
        
     def __init__(self, id):
         """incializador de la clase router. setea id e iniciliaza la tabla de routeo"""
-        global max_cant_term
+        global MAX_TERMINALES
         
         self.id_router = id     #asigna el identificador del router
         self.vecinos = {}       #diccionario que define las conexiones a los vecinos *ABSOLETO para NX
@@ -187,40 +228,40 @@ class Ip:
         return `self.id_router`+"."+`self.id_terminal`
     
 
-class Admin2:
+class Red:
     """Otra estructura de administrador basada en grafos del paquete networkX   
     ahora el conocimiento de la red lo tiene el grafo mismo, y se consultan sus metodos para saber los vecinos
     etc.
     """  
     def __init__(self):
-        global cant_routers
-        global asincronico
-        global max_conectividad
-        global max_transferencia
+        global CANT_ROUTERS
+        global ASINCRONICO
+        global MAX_CONECTIVIDAD
+        global MAX_TRANSFERENCIA
         global desde_archivo
-        global nombre_archivo
-        global max_cant_term
-        global max_cant_pag
+        global NOMBRE_ARCHIVO
+        global MAX_TERMINALES
+        global MAX_PAGINAS
         
         self.lista_terminales = {} #mapa id->terminal
         self.lista_paginas = {}  #mapa id->pagina
         self.lista_routers = {}  #mapa id->router
         
     
-        if leer_archivo:
+        if LEER_ARCHIVO:
         #lee el grafo desde un archivo
-            self.red = networkx.read_adjlist(nombre_archivo)
+            self.red = networkx.read_adjlist(NOMBRE_ARCHIVO)
         else:
         #create empty directed graph with edge data.     
             self.red = networkx.XGraph()
             
                
-            for i in range(cant_routers):
+            for i in range(CANT_ROUTERS):
                 r = Router(i)
                 self.red.add_node(r)
                 self.lista_routers[i] = r
             #el grafo tiene distintos valores en sus aristas bajo la lista [costo,tasa]
-            #donde costo = Cola[vecino]/floor(tasa/tam_paquete)
+            #donde costo = Cola[vecino]/floor(tasa/TAM_PAQUETE)
             
             
             for router in self.red.nodes():
@@ -229,22 +270,22 @@ class Admin2:
                 for vec_actual in [self.lista_routers[x] for x in router.cola_vecino.keys()]:
                     posibles.remove(vec_actual)
                     
-                max = max_conectividad if max_conectividad <= len(posibles) else len(posibles) #uso version corta de if 
+                max = MAX_CONECTIVIDAD if MAX_CONECTIVIDAD <= len(posibles) else len(posibles) #uso version corta de if 
                 vecinos_asignados = random.sample(posibles, random.choice(range(1, max +1 )))
                 for x in vecinos_asignados:
-                    tasa = random.choice(range(tam_paquete, max_transferencia)) #el minimo es el tamaño de 1 paquete
+                    tasa = random.choice(range(TAM_PAQUETE, MAX_TRANSFERENCIA)) #el minimo es el tamaño de 1 paquete
                     self.red.add_edge(router, x, [1 ,tasa])
                     #inicializa las colas
                     router.cola_vecino[x.id_router] = []
                     x.cola_vecino[router.id_router] = []
-        self.pos = networkx.drawing.spring_layout(self.red) #fijo la posicion de los nodos del grafo        
+        self.pos = networkx.drawing.spring_layout(self.red) #FIJO la posicion de los nodos del grafo        
 
         #genera terminales aleatoriamente y paginas dentro de el. Se lleva un diccionario 
         #para el admin tenga i  nformacion para buscar terminales y paginas mediante su id
         counter = 0
         counter_p = 0
         for router in self.red.nodes():
-            for id in range(random.choice(range(1,max_cant_term))):
+            for id in range(random.choice(range(1,MAX_TERMINALES))):
                 counter += 1
                 
                 t = Terminal(Ip(counter, router.id_router)) #genero el terminal
@@ -254,7 +295,7 @@ class Admin2:
         #genera paginas aleotariamente. Cada terminal tiene al menos 1 pagina.
 
             for terminal in router.terminales:
-                for i in range(1, random.choice(range(max_cant_pag))):
+                for i in range(1, random.choice(range(MAX_PAGINAS))):
                     p = Pagina(counter_p, terminal.ip_terminal)
                     terminal.set_pagina(p)
                     self.lista_paginas[p.id_pagina]=p
@@ -323,7 +364,7 @@ class Admin2:
     def paso(self, iteraciones=1):
         """Paso envia secuencialmente la cantidad de paquetes posibles a cada vecino.        
         """
-        global tam_paquete
+        global TAM_PAQUETE
         
         vuelta = 0
         while vuelta<iteraciones:
@@ -339,7 +380,7 @@ class Admin2:
                     
                     #determina la cantidad de paquetes que se pueden enviar. Si la cantidad en la cola es menor a lo posible, los tomo todos. 
                     tasa = self.red.get_edge(router,vecino)[1]
-                    cant_paquetes = int(tasa/tam_paquete) if int(tasa/tam_paquete) < long_cola else long_cola
+                    cant_paquetes = int(tasa/TAM_PAQUETE) if int(tasa/TAM_PAQUETE) < long_cola else long_cola
                     print "****Moviendo "+`cant_paquetes`+" paquetes desde "+`router`+" hacia "+`vecino`+ "(tasa "+`tasa`+")"
                     
                     #desencola la cantidad de paquetes de la cola del router.    
@@ -366,7 +407,7 @@ class Admin2:
         
         Ademas del valor, se deben actualizar las colas de cada router, esto es, desencolar cada paquete y encolarlo en la cola que corresponda al nuevo camino hacia el destino. 
         """
-        global tam_paquete
+        global TAM_PAQUETE
         for router in self.red.nodes():
             router.cola_temp ={} #cola temporal
             for vecino in [self.lista_routers[x] for x in router.cola_vecino.keys()]:             
@@ -375,7 +416,7 @@ class Admin2:
                 long_cola = router.long_cola_vecino(vecino)                
                 if long_cola==0: continue #si la cola a un vecino está vacia, la ignoro y sigo con el siguiente vecino
                 tasa = self.red.get_edge(router,vecino)[1]
-                costo = int(long_cola/int(tasa/tam_paquete)) 
+                costo = int(long_cola/int(tasa/TAM_PAQUETE)) 
                 #actualiza el valor de costo de transferencia actual entre dos routers. 
                 self.red.add_edge(router, vecino, [costo ,tasa])
                 
@@ -396,58 +437,98 @@ class Admin2:
         
     def demo(self):
         """un metodo para obetener informacion e interactuar en forma dinamica a traves de un menu"""
+	clearscreen()
         while 1:
             print "##############################"
             print "a :\t info Red"
+	    print "r :\t info router"
             print "t :\t info terminal"
             print "p :\t info pagina"
-            print "g :\t ver grafo de red"
-            print "r :\t info router"
+            print "g :\t ver grafo de red"  
             print "e :\t empaquetar pagina"
             print "d :\t pedir pagina"
             print "s :\t paso"
+	    print "h :\t AYUDA"
             print "S :\t salir"
-            print "##############################"
-            print "Cada momento de simulación consta de:"
-            print "pedir una o más páginas y"
-            print "luego llamar a la función paso"
-            print "puede luego observarse viendo el grafo"
-            print "o pedir la información de la red, "
-            print "terminales, páginas o routers."
             print "##############################"
             opcion = raw_input("Ingrese opcion: ")
             
-            if opcion=='S': 
+            if opcion=='S':
+		print " Saludos...."
                 break
+	    elif opcion=="h":
+		clearscreen()
+		print "############ AYUDA #################"
+		print "Cada momento de simulación consta de:"
+            	print "pedir una o más páginas y"
+	        print "luego llamar a la función paso"
+        	print "puede luego observarse viendo el grafo"
+            	print "o pedir la información de la red, "
+            	print "terminales, páginas o routers."
+            	print "##############################"
+
             elif opcion=='a':
                 self.info()
             elif opcion=='t':
-                t = raw_input("Ingrese id terminal: ")
-                if t=='s': break
-                term = self.lista_terminales[int(t)]
-                print "---el terminal tiene los siguientes datos"
-                term.info()
+		while 1:
+			try:
+		                t = raw_input("Ingrese id terminal  o (s)alir: ")
+                		if t=='s': break
+		                term = self.lista_terminales[int(t)]
+                		print "---el terminal tiene los siguientes datos"
+		                term.info()
+				break
+			except:
+				print "hubo un problema con el terminal elegido. Intente de nuevo"
             elif opcion=='p':
-                p = raw_input("Ingrese id_pagina: ")
-                if p=='s': break
-                pag = self.lista_paginas[int(p)]
-                print pag
+		while 1:
+	                p = raw_input("Ingrese id_pagina o (s)alir: ")
+        	        if p=='s': break
+			try:
+		                pag = self.lista_paginas[int(p)]
+		                print pag
+				break
+			except:
+				print "Hubo un problema con la pagina que eligio. Intente de nuevo"
+				continue		    
             elif opcion=='g':
                 self.mostrar()
             elif opcion=='r':
-                p = raw_input("Ingrese id_router: ")
-                print  self.lista_routers[int(p)].info()
-                print  "vecinos: "+ `self.red.neighbors(self.lista_routers[int(p)])`
+		while 1:
+			try:
+	                	p = raw_input("Ingrese id_router o (s)alir: ")
+		                if p=='s': break
+        		        print  self.lista_routers[int(p)].info()
+		                print  "vecinos: "+ `self.red.neighbors(self.lista_routers[int(p)])`
+				break
+			except:
+				print "Hubo un problema con el router que eligio. Intente de nuevo"
+				continue
+
+
             elif opcion=='e':
-                p = raw_input("Ingrese id_pagina: ")
-                t = raw_input("Ingrese id terminal de destino: ")
-                if p=='s' or t=='s': break
-                print self.lista_paginas[int(p)].empaquetar(self.lista_terminales[int(t)].ip_terminal)
+		while 1:
+			try:
+				p = raw_input("Ingrese id_pagina o (s)alir: ")
+                		t = raw_input("Ingrese id terminal de destino: ")
+		                if p=='s' or t=='s': break
+                		print self.lista_paginas[int(p)].empaquetar(self.lista_terminales[int(t)].ip_terminal)
+				break
+			except:
+				print "hubo un problema con la pagina o el terminal elegidos. Intente de nuevo"
+				continue
+
             elif opcion=='d':
-                p = raw_input("Ingrese id_pagina: ")
-                t = raw_input("Ingrese id terminal de destino: ")
-                if p=='s' or t=='s': break
-                self.pedir_pagina(self.lista_paginas[int(p)],self.lista_terminales[int(t)])
+		while 1:
+			try:
+		                p = raw_input("Ingrese id_pagina o (s)alir: ")
+		                t = raw_input("Ingrese id terminal de destino: ")
+		                if p=='s' or t=='s': break
+		                self.pedir_pagina(self.lista_paginas[int(p)],self.lista_terminales[int(t)])
+				break
+			except:
+				"Hubo un problema con la pagina el terminal elegidos. Intente de nuevo"
+				continue
             elif opcion=='s':
                 self.paso()
 
@@ -470,13 +551,13 @@ class Pagina:
             else:
                 self.data += random.choice(otros)
     
-    def empaquetar(self, ip_destino, tam=tam_paquete):
+    def empaquetar(self, ip_destino, tam=TAM_PAQUETE):
         """recibe una pagina y devuelve una lista de paquetes"""
         
-        global tam_paquete
+        global TAM_PAQUETE
         
         paquetes = []
-        total = int(self.long/tam_paquete)+1
+        total = int(self.long/TAM_PAQUETE)+1
         
         for i in range(total):
             data = self.data[i*tam:(i+1)*tam]
@@ -488,11 +569,11 @@ class Pagina:
         return self.long
 
     def __repr__(self):
-        global tam_paquete
+        global TAM_PAQUETE
         salida = "------------------------------\n"
         salida += "Pagina Nº"+`self.id_pagina`+" en "+`self.ip_origen`+"\n"
         salida +="Data ("+ `self.long`+"): "+ `self.data`+"\n"
-        salida +="paquetes: "+ `int(self.long/tam_paquete)+1`+"\n"
+        salida +="paquetes: "+ `int(self.long/TAM_PAQUETE)+1`+"\n"
         return salida
         
         
@@ -551,22 +632,25 @@ class Paquete:
 
 ##################### MAIN #########################
 
-##
-ad = Admin2()
-ad.demo()
-##ad.mostrar()
-##ad.pedir_pagina(1,6)
-##ad.pedir_pagina(3,3)
-##ad.pedir_pagina(5,5)
-##ad.
+print """Bienvenido a PynetSim, un software de simulación para el estudio del trafico de redes.
+(c) Martin Gaitan y Leonardo Rocha Junio de 2007.
+
+Este programa es Software Libre bajo los términos de la licencia GPL 3.0"""
 
 
-##if not leer_archivo:
-##    networkx.write_adjlist(ad.red, nombre_archivo)
-##
-##org_dst = (ad.red.nodes()[0], ad.red.nodes()[1])
+if __name__ == '__main__':
+	"""si el el programa se ejecuta en modo no interactivo, invoco el modo 'demo'. """
 
+	print """Usted ha ejecutado el software en modo NO interactivo. Se ejecutará el modo demo() para interactuar con la red. """
+	raw_input("Creando la red aleatoriamente....Presione una tecla para continuar")
+	
 
+	ad = Red()
+	ad.demo()
+else:
+	print """Usted ha ejecutado el software en modo interactivo. En primera instancia, cree un objeto tipo Red().
+"""
+	
 
 
 

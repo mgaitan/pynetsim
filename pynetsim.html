@@ -1,0 +1,255 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module pynetsim</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>pynetsim</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/tin/facu/paradigmas/py_sim/pynetsim/pynetsim.py">/home/tin/facu/paradigmas/py_sim/pynetsim/pynetsim.py</a></font></td></tr></table>
+    <p><tt>(c)&nbsp;Martin&nbsp;Gaitan&nbsp;y&nbsp;Leonardo&nbsp;Rocha&nbsp;Junio&nbsp;de&nbsp;2007.<br>
+Este&nbsp;programa&nbsp;es&nbsp;Software&nbsp;Libre&nbsp;bajo&nbsp;los&nbsp;términos&nbsp;de&nbsp;la&nbsp;licencia&nbsp;GPL&nbsp;3.0<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;<br>
+Requerimientos<br>
+--------------------<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;requiere&nbsp;python&nbsp;2.5&nbsp;(por&nbsp;las&nbsp;formas&nbsp;cortas&nbsp;de&nbsp;la&nbsp;sentencia&nbsp;if)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;libreria&nbsp;networkx&nbsp;.&nbsp;https://networkx.lanl.gov/wiki<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En&nbsp;ubuntu/debian:&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$sudo&nbsp;apt-get&nbsp;install&nbsp;python-networkx<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;libreria&nbsp;matplotlib/pylab&nbsp;para&nbsp;graficar.&nbsp;<a href="http://matplotlib.sourceforge.net/">http://matplotlib.sourceforge.net/</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$sudo&nbsp;&nbsp;apt-get&nbsp;install&nbsp;python-matplotlib&nbsp;<br>
+&nbsp;<br>
+Ejecucion&nbsp;basica<br>
+-----------------------<br>
+&nbsp;<br>
+import&nbsp;pynetsim<br>
+red&nbsp;=&nbsp;pynetsims.<a href="#Red">Red</a>()<br>
+red.demo()<br>
+&nbsp;<br>
+Forma&nbsp;de&nbsp;Uso:<br>
+----------------------<br>
+en&nbsp;la&nbsp;consola&nbsp;escribir:<br>
+&nbsp;<br>
+$&nbsp;python&nbsp;pynetsim.py&nbsp;<br>
+&nbsp;<br>
+(esto&nbsp;inicia&nbsp;el&nbsp;programa&nbsp;en&nbsp;modo&nbsp;no&nbsp;interactivo)<br>
+&nbsp;<br>
+Otra&nbsp;forma,&nbsp;con&nbsp;la&nbsp;consola&nbsp;de&nbsp;Python:<br>
+Abrir&nbsp;una&nbsp;consola&nbsp;interactiva&nbsp;de&nbsp;Python&nbsp;en&nbsp;el&nbsp;directorio&nbsp;donde&nbsp;se&nbsp;encuentra&nbsp;el&nbsp;archivo.<br>
+en&nbsp;el&nbsp;prompt:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;import&nbsp;pynetsim<br>
+&nbsp;<br>
+se&nbsp;iniciará&nbsp;el&nbsp;programa&nbsp;interactivo&nbsp;de&nbsp;forma&nbsp;automática<br>
+&nbsp;<br>
+Documentacion<br>
+----------------<br>
+&nbsp;<br>
+El&nbsp;codigo&nbsp;se&nbsp;ha&nbsp;autodocumentado&nbsp;en&nbsp;formato&nbsp;PyDoc&nbsp;(funciones,&nbsp;metodos&nbsp;y&nbsp;demas).&nbsp;Para&nbsp;ver&nbsp;una&nbsp;<br>
+descripcion&nbsp;de&nbsp;cada&nbsp;uno&nbsp;de&nbsp;los&nbsp;elementos&nbsp;ver&nbsp;el&nbsp;archivo&nbsp;<br>
+&nbsp;<br>
+pynetsim.html</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="matplotlib.html">matplotlib</a><br>
+<a href="networkx.html">networkx</a><br>
+</td><td width="25%" valign=top><a href="pylab.html">pylab</a><br>
+<a href="random.html">random</a><br>
+</td><td width="25%" valign=top><a href="string.html">string</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="pynetsim.html#Ip">Ip</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pynetsim.html#Pagina">Pagina</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pynetsim.html#Paquete">Paquete</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pynetsim.html#Red">Red</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pynetsim.html#Router">Router</a>
+</font></dt><dt><font face="helvetica, arial"><a href="pynetsim.html#Terminal">Terminal</a>
+</font></dt></dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Ip">class <strong>Ip</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Ip-__init__"><strong>__init__</strong></a>(self, id_terminal, id_router)</dt></dl>
+
+<dl><dt><a name="Ip-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Pagina">class <strong>Pagina</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>una&nbsp;pagina&nbsp;es&nbsp;una&nbsp;cadena&nbsp;de&nbsp;tamaño&nbsp;y&nbsp;caracteres&nbsp;aleatorios&nbsp;que&nbsp;pertenece&nbsp;a&nbsp;un&nbsp;terminal.&nbsp;<br>
+La&nbsp;pagina&nbsp;guarda&nbsp;el&nbsp;ip&nbsp;de&nbsp;origen<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Pagina-__init__"><strong>__init__</strong></a>(self, id, ip_origen)</dt></dl>
+
+<dl><dt><a name="Pagina-__len__"><strong>__len__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Pagina-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Pagina-empaquetar"><strong>empaquetar</strong></a>(self, ip_destino, tam<font color="#909090">=3</font>)</dt><dd><tt>recibe&nbsp;una&nbsp;pagina&nbsp;y&nbsp;devuelve&nbsp;una&nbsp;lista&nbsp;de&nbsp;paquetes</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Paquete">class <strong>Paquete</strong></a></font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Paquete-__init__"><strong>__init__</strong></a>(self, numero_paq, id_pagina, total, ip_origen, ip_destino, data)</dt></dl>
+
+<dl><dt><a name="Paquete-__len__"><strong>__len__</strong></a>(self)</dt><dd><tt>devuelve&nbsp;la&nbsp;longitud&nbsp;del&nbsp;paquete</tt></dd></dl>
+
+<dl><dt><a name="Paquete-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Paquete-info"><strong>info</strong></a>(self)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Red">class <strong>Red</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Otra&nbsp;estructura&nbsp;de&nbsp;administrador&nbsp;basada&nbsp;en&nbsp;grafos&nbsp;del&nbsp;paquete&nbsp;networkX&nbsp;&nbsp;&nbsp;<br>
+ahora&nbsp;el&nbsp;conocimiento&nbsp;de&nbsp;la&nbsp;red&nbsp;lo&nbsp;tiene&nbsp;el&nbsp;grafo&nbsp;mismo,&nbsp;y&nbsp;se&nbsp;consultan&nbsp;sus&nbsp;metodos&nbsp;para&nbsp;saber&nbsp;los&nbsp;vecinos<br>
+etc.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Red-__init__"><strong>__init__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Red-actualizar"><strong>actualizar</strong></a>(self)</dt><dd><tt>este&nbsp;metodo&nbsp;actualiza&nbsp;los&nbsp;valores&nbsp;del&nbsp;primer&nbsp;valor&nbsp;en&nbsp;la&nbsp;arista,&nbsp;que&nbsp;representa<br>
+el&nbsp;costo&nbsp;(en&nbsp;ciclos)&nbsp;que&nbsp;representa&nbsp;enviar&nbsp;los&nbsp;paquetes&nbsp;entre&nbsp;un&nbsp;nodo&nbsp;y&nbsp;otro.&nbsp;<br>
+&nbsp;<br>
+En&nbsp;este&nbsp;punto,&nbsp;interfiere&nbsp;la&nbsp;carga&nbsp;actual&nbsp;de&nbsp;la&nbsp;red.&nbsp;<br>
+Por&nbsp;ejemplo,&nbsp;por&nbsp;más&nbsp;que&nbsp;Entre&nbsp;1&nbsp;y&nbsp;3&nbsp;hay&nbsp;una&nbsp;conexion&nbsp;rapida,&nbsp;pero&nbsp;hay&nbsp;muchos&nbsp;paquetes&nbsp;hacia&nbsp;3,&nbsp;<br>
+entonces&nbsp;será&nbsp;preferible&nbsp;enviarla&nbsp;por&nbsp;otro&nbsp;camino.&nbsp;<br>
+&nbsp;<br>
+Ademas&nbsp;del&nbsp;valor,&nbsp;se&nbsp;deben&nbsp;actualizar&nbsp;las&nbsp;colas&nbsp;de&nbsp;cada&nbsp;router,&nbsp;esto&nbsp;es,&nbsp;desencolar&nbsp;cada&nbsp;paquete&nbsp;y&nbsp;encolarlo&nbsp;en&nbsp;la&nbsp;cola&nbsp;que&nbsp;corresponda&nbsp;al&nbsp;nuevo&nbsp;camino&nbsp;hacia&nbsp;el&nbsp;destino.</tt></dd></dl>
+
+<dl><dt><a name="Red-camino"><strong>camino</strong></a>(self, r_origen, r_destino)</dt><dd><tt>Dado&nbsp;un&nbsp;router&nbsp;de&nbsp;origen&nbsp;y&nbsp;uno&nbsp;de&nbsp;destino,&nbsp;devuelve&nbsp;el&nbsp;camino&nbsp;menos&nbsp;<br>
+costoso&nbsp;segun&nbsp;el&nbsp;balance&nbsp;de&nbsp;carga&nbsp;actual</tt></dd></dl>
+
+<dl><dt><a name="Red-demo"><strong>demo</strong></a>(self)</dt><dd><tt>un&nbsp;metodo&nbsp;para&nbsp;obetener&nbsp;informacion&nbsp;e&nbsp;interactuar&nbsp;en&nbsp;forma&nbsp;dinamica&nbsp;a&nbsp;traves&nbsp;de&nbsp;un&nbsp;menu</tt></dd></dl>
+
+<dl><dt><a name="Red-determinar_vecino"><strong>determinar_vecino</strong></a>(self, r_origen, r_destino)</dt><dd><tt>Dado&nbsp;un&nbsp;router&nbsp;de&nbsp;origen&nbsp;y&nbsp;uno&nbsp;de&nbsp;destino,&nbsp;devuelve&nbsp;el&nbsp;paso&nbsp;inmediato&nbsp;segun&nbsp;el&nbsp;camino&nbsp;actual</tt></dd></dl>
+
+<dl><dt><a name="Red-info"><strong>info</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Red-mostrar"><strong>mostrar</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Red-paso"><strong>paso</strong></a>(self, iteraciones<font color="#909090">=1</font>)</dt><dd><tt>Paso&nbsp;envia&nbsp;secuencialmente&nbsp;la&nbsp;cantidad&nbsp;de&nbsp;paquetes&nbsp;posibles&nbsp;a&nbsp;cada&nbsp;vecino.</tt></dd></dl>
+
+<dl><dt><a name="Red-pedir_pagina"><strong>pedir_pagina</strong></a>(self, pagina, t_destino)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Router">class <strong>Router</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>esta&nbsp;clase&nbsp;define&nbsp;el&nbsp;elemento&nbsp;principal&nbsp;de&nbsp;la&nbsp;red:&nbsp;el&nbsp;router.&nbsp;El&nbsp;router&nbsp;se&nbsp;conecta&nbsp;con&nbsp;otros&nbsp;vecinos,&nbsp;formando&nbsp;una&nbsp;red.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+a&nbsp;la&nbsp;vez,&nbsp;el&nbsp;router&nbsp;tiene&nbsp;conectado&nbsp;varios&nbsp;terminales&nbsp;que&nbsp;son&nbsp;los&nbsp;que&nbsp;contienen&nbsp;y&nbsp;solicitan&nbsp;paginas.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Router-__init__"><strong>__init__</strong></a>(self, id)</dt><dd><tt>incializador&nbsp;de&nbsp;la&nbsp;clase&nbsp;router.&nbsp;setea&nbsp;id&nbsp;e&nbsp;iniciliaza&nbsp;la&nbsp;tabla&nbsp;de&nbsp;routeo</tt></dd></dl>
+
+<dl><dt><a name="Router-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Router-actualizar_cola"><strong>actualizar_cola</strong></a>(self, nueva_cola)</dt></dl>
+
+<dl><dt><a name="Router-analizar_completitud"><strong>analizar_completitud</strong></a>(self, r_vecino)</dt><dd><tt>analiza&nbsp;la&nbsp;cola&nbsp;hacia&nbsp;el&nbsp;vecino&nbsp;en&nbsp;busca&nbsp;de&nbsp;una&nbsp;pagina&nbsp;completa.&nbsp;Si&nbsp;la&nbsp;encuentra&nbsp;la&nbsp;quita&nbsp;de&nbsp;la&nbsp;cola&nbsp;y&nbsp;entrega</tt></dd></dl>
+
+<dl><dt><a name="Router-desencolar"><strong>desencolar</strong></a>(self, r_vecino, cant_paquetes)</dt><dd><tt>devuelve&nbsp;una&nbsp;cantidad&nbsp;de&nbsp;paquetes&nbsp;del&nbsp;final&nbsp;de&nbsp;la&nbsp;cola&nbsp;hacia&nbsp;el&nbsp;vecino&nbsp;especificado</tt></dd></dl>
+
+<dl><dt><a name="Router-encolar"><strong>encolar</strong></a>(self, paquetes, r_vecino)</dt><dd><tt>agrega&nbsp;los&nbsp;paquetes&nbsp;al&nbsp;principio&nbsp;de&nbsp;la&nbsp;cola&nbsp;correspondiente&nbsp;al&nbsp;vecino&nbsp;indicado.&nbsp;Si&nbsp;el&nbsp;vecino&nbsp;no&nbsp;existe&nbsp;devuelve&nbsp;un&nbsp;error<br>
+la&nbsp;cola&nbsp;es&nbsp;tipo&nbsp;FIFO</tt></dd></dl>
+
+<dl><dt><a name="Router-es_vecino"><strong>es_vecino</strong></a>(self, router_vecino)</dt><dd><tt>verifica&nbsp;si&nbsp;un&nbsp;router&nbsp;es&nbsp;vecino&nbsp;del&nbsp;instanciado&nbsp;(self)</tt></dd></dl>
+
+<dl><dt><a name="Router-info"><strong>info</strong></a>(self)</dt><dd><tt>muestra&nbsp;datos&nbsp;de&nbsp;un&nbsp;router</tt></dd></dl>
+
+<dl><dt><a name="Router-long_cola_vecino"><strong>long_cola_vecino</strong></a>(self, r_vecino)</dt></dl>
+
+<dl><dt><a name="Router-set_terminal"><strong>set_terminal</strong></a>(self, terminal)</dt></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Terminal">class <strong>Terminal</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>el&nbsp;objeto&nbsp;terminal&nbsp;está&nbsp;conectado&nbsp;a&nbsp;un&nbsp;router&nbsp;y&nbsp;puede&nbsp;ser&nbsp;servidor&nbsp;o&nbsp;cliente&nbsp;indistintamente<br>
+los&nbsp;terminales&nbsp;tienen&nbsp;paginas&nbsp;generadas&nbsp;aleatoriamente.&nbsp;La&nbsp;transferencia&nbsp;entre&nbsp;terminal&nbsp;y&nbsp;router&nbsp;<br>
+se&nbsp;considera&nbsp;infinita,&nbsp;por&nbsp;lo&nbsp;que&nbsp;solo&nbsp;toma&nbsp;un&nbsp;ciclo&nbsp;mover&nbsp;toda&nbsp;una&nbsp;pagina&nbsp;al&nbsp;primer&nbsp;router.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Terminal-__init__"><strong>__init__</strong></a>(self, ip)</dt></dl>
+
+<dl><dt><a name="Terminal-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Terminal-info"><strong>info</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Terminal-set_pagina"><strong>set_pagina</strong></a>(self, pagina)</dt></dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-clearscreen"><strong>clearscreen</strong></a>(numlines<font color="#909090">=100</font>)</dt><dd><tt>Clear&nbsp;the&nbsp;console.<br>
+&nbsp;<br>
+numlines&nbsp;is&nbsp;an&nbsp;optional&nbsp;argument&nbsp;used&nbsp;only&nbsp;as&nbsp;a&nbsp;fall-back.</tt></dd></dl>
+ <dl><dt><a name="-dibujar"><strong>dibujar</strong></a>(grafo, edges<font color="#909090">=False</font>, pos<font color="#909090">=False</font>)</dt><dd><tt>esta&nbsp;funcion&nbsp;dibuja&nbsp;la&nbsp;red&nbsp;(grafo)&nbsp;incluyendo&nbsp;label&nbsp;en&nbsp;los&nbsp;puentes<br>
+edges&nbsp;es&nbsp;una&nbsp;tupla&nbsp;triple&nbsp;del&nbsp;tipo&nbsp;(n1,n2,valor).&nbsp;La&nbsp;inclusion&nbsp;del&nbsp;label&nbsp;en&nbsp;el&nbsp;puente&nbsp;se&nbsp;hace&nbsp;a&nbsp;mano.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>ASINCRONICO</strong> = False<br>
+<strong>CANT_ROUTERS</strong> = 5<br>
+<strong>FIJO</strong> = True<br>
+<strong>GRABAR_ARCHIVO</strong> = False<br>
+<strong>LEER_ARCHIVO</strong> = False<br>
+<strong>MAX_CONECTIVIDAD</strong> = 2<br>
+<strong>MAX_PAGINAS</strong> = 4<br>
+<strong>MAX_TERMINALES</strong> = 5<br>
+<strong>MAX_TRANSFERENCIA</strong> = 30<br>
+<strong>NOMBRE_ARCHIVO</strong> = 'datos.dat'<br>
+<strong>TAM_PAQUETE</strong> = 3</td></tr></table>
+</body></html>
